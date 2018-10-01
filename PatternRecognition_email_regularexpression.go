@@ -2,12 +2,31 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"regexp"
 	"strings"
 )
 
+func checkerror(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
 func main() {
+
+	// read file (python : fh = open(r"test_emails.txt", "r").read() )
+	data, err := ioutil.ReadFile("emails.txt")
+	checkerror(err)
+	fmt.Println(data) // data type is  'bytes'
+
+	// convert data from bytes type to strings
+	str := string(data)
+	fmt.Println(str)
+
+	r := regexp.MustCompile(`From:*`)
+	fmt.Println(r)
 
 	//[[cat c] [bat b] [sat s] [mat m]]
 	re, err := regexp.Compile(`(.)at`)
