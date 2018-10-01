@@ -23,9 +23,15 @@ func main() {
 
 	// convert data from bytes type to strings
 	str := string(data)
-	fmt.Println(str)
+	// fmt.Println(str)
 
-	r := regexp.MustCompile(`From:*`)
+	// python import re
+	// for line in re.findall("From:.*", fh):
+	// print(line)
+
+	from, err := regexp.Compile(`(From:)`)
+	//r := re.FindAllString("{From}", -1)
+	r := from.FindAllString(str)
 	fmt.Println(r)
 
 	//[[cat c] [bat b] [sat s] [mat m]]
