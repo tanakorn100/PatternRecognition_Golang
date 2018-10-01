@@ -26,9 +26,9 @@ func main() {
 		fmt.Printf("%d. %s\n", k, v)
 	}
 
-	s := "  Is golang good for real world web apps?  "
+	s2 := "  Is golang good for real world web apps?  "
 	// <Is golang good for real world web apps?>
-	fmt.Printf("<%v>", strings.TrimSpace(s))
+	fmt.Printf("<%v>", strings.TrimSpace(s2))
 
 	// Prints
 	// 1. Mr
