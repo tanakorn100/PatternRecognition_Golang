@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"strings"
 )
 
 func main() {
@@ -24,6 +25,11 @@ func main() {
 	for k, v := range result {
 		fmt.Printf("%d. %s\n", k, v)
 	}
+
+	s := "  Is golang good for real world web apps?  "
+	// <Is golang good for real world web apps?>
+	fmt.Printf("<%v>", strings.TrimSpace(s))
+
 	// Prints
 	// 1. Mr
 	// 2.
