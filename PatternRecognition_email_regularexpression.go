@@ -2,32 +2,31 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"regexp"
 )
 
 func main() {
-	r, err := regexp.Compile(`Nattawut`)
 
+	//[[cat c] [bat b] [sat s] [mat m]]
+	re, err := regexp.Compile(`(.)at`)
 	if err != nil {
-		fmt.Printf("Error : Don't have Nattawut")
+		log.Fatal(err)
 		return
 	}
+	res := re.FindAllStringSubmatch("The cat bat sat on the mat.", -1)
+	fmt.Printf("%v", res)
 
-	if r.MatchString("Hello Regular Expression. from Nattawut") == true {
-		fmt.Printf("Match ")
-	} else {
-		fmt.Printf("No match ")
+	s := "Mr. Nattawut Ruangvivattanaroj"
+	re1, err := regexp.Compile(`(Mr)(s)?\. (\w+) (\w+)`)
+	result := re1.FindStringSubmatch(s)
+
+	for k, v := range result {
+		fmt.Printf("%d. %s\n", k, v)
 	}
-
-	r2, err := regexp.Compile(`\d`)
-	if err != nil {
-		fmt.Printf("Error : Type not INT")
-		return
-	}
-
-	// Will print 'true':
-	fmt.Printf("%v", r2.MatchString("Seven times seven is 49."))
-	// Will print 'false':
-	fmt.Printf("%v", r2.MatchString("Seven times seven is forty-nine."))
-
+	// Prints
+	// 1. Mr
+	// 2.
+	// 3. Nattawut
+	// 4. Ruangvivattanaroj
 }
