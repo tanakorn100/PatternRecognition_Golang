@@ -1,11 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	s "strings"
+)
 
 //scope global variable
 var globalVariable int = 5000
+var p = fmt.Println
 
 func main() {
+	stringF()
 	x := 15
 	fmt.Println("value x is ", x)
 	fmt.Println("Address x is ", &x)
@@ -15,6 +20,7 @@ func main() {
 	*p = 20 //เปลี่ยนค่าให้เป็น 20 ด้วย pointer
 	fmt.Println("value x is ", x)
 
+	structure()
 	closure()
 	mp()
 	slicing()
@@ -23,9 +29,40 @@ func main() {
 	fmt.Println(factorial(5))
 }
 
+func stringF() {
+	p("Contains : ", s.Contains("test", "es"))      //ตรวจสอบว่ามี es ภายใน test หรือไม่
+	p("Count : ", s.Count("test", "t"))             //นับว่ามีตัว t ภายใน test ทั้งหมดกี่ตัว
+	p("HasPrefix : ", s.HasPrefix("test", "te"))    //ตรวจสอบว่า test ขึ้นต้นด้วย te หรือไม่
+	p("HasSuffix : ", s.HasSuffix("test", "st"))    //ตรวจสอบว่า test ลงท้ายด้วย st หรือไม่
+	p("Index : ", s.Index("test", "e"))             //ดึงค่า index ของตัวอักษร e ในคำว่า test
+	p("Join : ", s.Join([]string{"a", "b"}, "-"))   // นำสตริง a และ b มาต่อกัน ซึ่งมี - มาคั่นกลาง
+	p("Repeat : ", s.Repeat("a", 5))                //กำหนดให้ตัวอักษร a ซ้ำกันจำนวน 5 ตัวอักษร จะได้ aaaaa
+	p("Replace : ", s.Replace("foo", "o", "0", -2)) //กำหนด 1 จะเปลี่ยนแค่ 1 ตัวเริ่มจากซ้ายไปขวา แต่ถ้ากำหนด -n จะเปลี่ยนทุกตัว
+	p("Split : ", s.Split("t-e-s-t", "-"))          //แยกตัวอักษร หรือ คำ ต้องสิ่งที่กำหนด ซึ่งอาจจะเป็นตัวอักษร ช่องว่าง หรือ สัญลักษณ์
+	p("ToUpper : ", s.ToUpper("test"))
+	p("ToLower : ", s.ToLower("TEST"))
+	p("Len : ", len("TEST"))
+}
+
+type Books struct {
+	title    string
+	author   string
+	subtitle string
+	prices   float64
+}
+
 func structure() {
 	//like database use to store data
+	var Book1 Books
+	Book1.title = "Go Programming"
+	Book1.author = "Kor CS KMITL"
+	Book1.subtitle = "Model of Computation"
+	Book1.prices = 600
 
+	fmt.Println(Book1.title)
+
+	Golang := Books{title: "Go Programming", author: "Kor CS KMITL", prices: 599.99}
+	fmt.Println(Golang)
 }
 func closure() {
 	add := func(x, y int) int {
