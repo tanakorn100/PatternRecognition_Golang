@@ -58,10 +58,6 @@ func main() {
 		subject_title := s.Replace(subject_data, "Subject: ", "", -1)
 		fmt.Println("Subject : ", subject_title)
 
-		// email_rep := regexp.MustCompile(" .*@.*$")
-		// recipient_email := email_rep.FindString(recipient_data)
-		// fmt.Println("Name-Recipient : ", s.Replace(recipient_email, " ", "", -1))
-
 		// data := map[string]string{
 		// 	"Email_sender": email_sender[1:],
 		// }
