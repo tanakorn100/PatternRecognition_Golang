@@ -14,19 +14,19 @@ func checkerror(e error) {
 }
 
 func main() {
-	fmt.Println("Email - Model of Computation")
-	fmt.Println("--- Reading file ---")
 	data, err := ioutil.ReadFile("emails.txt")
 	checkerror(err)
 	// convert data from bytes type to strings
 	emails_data_str := string(data)
-	//fmt.Println(email_data_str)
+	// split email dataset to array list
 	emails := s.Split(emails_data_str, "From r ")
+	// remove index 0 is blank
 	emails = emails[1:]
-	//fmt.Println("Split : ", email)
-	fmt.Println(len(emails))
+	fmt.Println("Total : "len(emails))
 
-	for _, email := range emails {
+	for index, email := range emails {
+
+		fmt.Println("----- Email No. ", index+1, " ------")
 		sender := regexp.MustCompile("From:.*")
 		sender_data := sender.FindString(email)
 		// fmt.Println("Email-Sender ", index, " : ", sender_data)
