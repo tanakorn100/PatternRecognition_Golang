@@ -60,6 +60,10 @@ func main() {
 		subject_title := s.Replace(subject_data, "Subject: ", "", -1)
 		fmt.Println("Subject : ", subject_title)
 
+		content := regexp.MustCompile("Status:.[a-zA-Z0-9]+")
+		content_data := content.FindString(email)
+		fmt.Println("Body : ", content_data)
+
 		// data := map[string]string{
 		// 	"Email_sender": email_sender[1:],
 		// }
