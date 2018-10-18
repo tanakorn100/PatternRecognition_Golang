@@ -22,7 +22,7 @@ func main() {
 	emails := s.Split(emails_data_str, "From r ")
 	// remove index 0 is blank
 	emails = emails[1:]
-	fmt.Println("Total : "len(emails))
+	fmt.Println("Total : ", len(emails))
 
 	for index, email := range emails {
 
@@ -40,6 +40,8 @@ func main() {
 
 		fmt.Println("Email-Sender : ", email_sender[1:])
 		fmt.Println("Name-Sender : ", s.Trim(name_sender, "\""))
+		email_account := s.Split(email_sender[1:], "@")
+		fmt.Println("Account : ", email_account[0], "\tDomain : ", email_account[1])
 
 		recipient := regexp.MustCompile("To:.*")
 		recipient_data := recipient.FindString(email)
