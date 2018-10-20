@@ -29,8 +29,6 @@ func main() {
 		fmt.Println("----- Email No. ", index+1, " ------")
 		sender := regexp.MustCompile("From:.*")
 		sender_data := sender.FindString(email)
-		// fmt.Println("Email-Sender ", index, " : ", sender_data)
-		// From: "MR. JAMES NGOLA." <james_ngola2002@maktoob.com>
 
 		s_email := regexp.MustCompile("<.*@[a-zA-Z]+.[a-zA-Z]+")
 		email_sender := s_email.FindString(sender_data)
@@ -47,7 +45,8 @@ func main() {
 		recipient_data := recipient.FindString(email)
 		email_rep := regexp.MustCompile(" .*@.*$")
 		recipient_email := email_rep.FindString(recipient_data)
-		fmt.Println("Name-Recipient : ", s.Replace(recipient_email, " ", "", -1))
+		//fmt.Println("Name-Recipient : ", s.Replace(recipient_email, " ", "", -1))
+		fmt.Println("Name-Recipient :", recipient_email)
 
 		date := regexp.MustCompile("Date:.*")
 		date_data := date.FindString(email)
@@ -55,12 +54,12 @@ func main() {
 		date_my := date_re.FindString(date_data)
 		fmt.Println("Date send : ", date_my)
 
-		subject := regexp.MustCompile("Subject: .*")
+		subject := regexp.MustCompile("Subject:[\t\n\f\r ]*.*")
 		subject_data := subject.FindString(email)
-		subject_title := s.Replace(subject_data, "Subject: ", "", -1)
-		fmt.Println("Subject : ", subject_title)
+		//subject_title := s.Replace(subject_data, "Subject: ", "", -1)
+		fmt.Println(subject_data)
 
-		content := regexp.MustCompile("Status:.[a-zA-Z0-9]+")
+		content := regexp.MustCompile("Status:[\t\n\f\r ]+[a-zA-Z]+(\n|[0-9A-Za-z_]+|.*|[\t\n\f\r ])+")
 		content_data := content.FindString(email)
 		fmt.Println("Body : ", content_data)
 
