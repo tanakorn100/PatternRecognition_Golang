@@ -13,14 +13,14 @@ func checkerror(e error) {
 	}
 }
 
-var sender_email_array [5]string
-var sender_name_array [5]string
-var username_array [5]string
-var domainname_array [5]string
-var recipient_email_array [5]string
-var datesend_array [5]string
-var subject_array [5]string
-var contentemail_array [5]string
+var sender_email_array []string
+var sender_name_array []string
+var username_array []string
+var domainname_array []string
+var recipient_email_array []string
+var datesend_array []string
+var subject_array []string
+var contentemail_array []string
 
 func main() {
 	data, err := ioutil.ReadFile("fradulent_emails.txt")
@@ -34,6 +34,9 @@ func main() {
 
 		// fmt.Println("----- Email No. ", index+1, " ------")
 
+		fmt.Println(email)
+		fmt.Println(index)
+
 		sender := regexp.MustCompile("From:.*")
 		sender_data := sender.FindString(email)
 
@@ -45,8 +48,8 @@ func main() {
 		name_sender := s_name.FindString(sender_data)
 		names_sender := s.Trim(name_sender, "\"")
 
-		//fmt.Println("Sender Email : ", emails_sender)
-		//fmt.Println("Sender Name : ", names_sender)
+		fmt.Println("Sender Email : ", emails_sender)
+		fmt.Println("Sender Name : ", names_sender)
 
 		sender_email_array[index] = emails_sender
 		sender_name_array[index] = names_sender
