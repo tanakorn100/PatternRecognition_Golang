@@ -23,20 +23,17 @@ var subject_array []string
 var contentemail_array []string
 
 func main() {
-	data, err := ioutil.ReadFile("fradulent_emails.txt")
+	data, err := ioutil.ReadFile("emails.txt")
 	checkerror(err)
 	emails_data_str := string(data)
 	emails := s.Split(emails_data_str, "From r ")
 	emails = emails[1:]
+
 	fmt.Println("Total : ", len(emails))
 
-	for index, email := range emails {
+	for _, email := range emails {
 
 		// fmt.Println("----- Email No. ", index+1, " ------")
-
-		fmt.Println(email)
-		fmt.Println(index)
-
 		sender := regexp.MustCompile("From:.*")
 		sender_data := sender.FindString(email)
 
@@ -48,23 +45,23 @@ func main() {
 		name_sender := s_name.FindString(sender_data)
 		names_sender := s.Trim(name_sender, "\"")
 
-		fmt.Println("Sender Email : ", emails_sender)
-		fmt.Println("Sender Name : ", names_sender)
+		// fmt.Println("Sender Email : ", emails_sender)
+		// fmt.Println("Sender Name : ", names_sender)
 
-		sender_email_array[index] = emails_sender
-		sender_name_array[index] = names_sender
+		sender_email_array := append(sender_email_array, emails_sender)
+		sender_name_array := append(sender_name_array, names_sender)
 
 		email_account := s.Split(emails_sender, "@")
 		//fmt.Println("Username : ", email_account[0], "\tDomain : ", email_account[1])
-		username_array[index] = email_account[0]
-		domainname_array[index] = email_account[1]
+		username_array := append(username_array, email_account[0])
+		domainname_array := append(domainname_array, email_account[1])
 
 		recipient := regexp.MustCompile("To:.*")
 		recipient_data := recipient.FindString(email)
 		email_rep := regexp.MustCompile(" .*@.*$")
 		recipient_email := email_rep.FindString(recipient_data)
 
-		recipient_email_array[index] = recipient_email
+		recipient_email_array := append(recipient_email_array, recipient_email)
 
 		//fmt.Println("Name-Recipient : ", s.Replace(recipient_email, " ", "", -1))
 		//fmt.Println("Recipient Email :", recipient_email)
@@ -74,27 +71,23 @@ func main() {
 		date_re := regexp.MustCompile("[0-9]+.[a-zA-Z]+.[0-9]+.")
 		date_my := date_re.FindString(date_data)
 
-		datesend_array[index] = date_my
+		datesend_array := append(datesend_array, date_my)
 		//fmt.Println("Date send : ", date_my)
 
 		subject := regexp.MustCompile("Subject:[\t\n\f\r ]*.*")
 		subject_data := subject.FindString(email)
 
-		subject_array[index] = subject_data
+		subject_array := append(subject_array, subject_data)
+
 		//subject_title := s.Replace(subject_data, "Subject: ", "", -1)
 		//fmt.Println(subject_data)
 
 		content := regexp.MustCompile("Status:[\t\n\f\r ]+[a-zA-Z0-9]+(\n|[0-9A-Za-z_]+|.*|[\t\n\f\r ])+")
 		content_data := content.FindString(email)
 
-		contentemail_array[index] = content_data
+		contentemail_array := append(contentemail_array, content_data)
 		//fmt.Println("Email-Content : ", content_data)
-
 	}
-
-	// fmt.Println(sender_email_array)
-
-	// var email_datas [][]array
 
 	for index, _ := range sender_email_array {
 		email := map[string]string{
@@ -108,7 +101,7 @@ func main() {
 			"contentemail":    contentemail_array[index],
 		}
 
-		fmt.Println(email["domainname"])
+		fmt.Println(email)
 
 		// email_datas[index] = email
 	}
