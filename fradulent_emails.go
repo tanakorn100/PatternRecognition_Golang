@@ -17,6 +17,7 @@ var sender_email_array [3976]string
 var sender_name_array [3976]string
 var username_array [3976]string
 var domainname_array [3976]string
+var domaingroup_array [3976]string
 var recipient_email_array [3976]string
 var reply_email_array [3976]string
 var datesend_array [3976]string
@@ -41,22 +42,32 @@ func main() {
 	for index, email := range emails {
 
 		// fmt.Println("----- Email No. ", index+1, " ------")
-		sender := regexp.MustCompile("From:.*")
+		sender := regexp.MustCompile("\nFrom:.*")
 		sender_data := sender.FindString(email)
+		// fmt.Println(sender_data)
 
-		s_email := regexp.MustCompile("<.*[^\t\n\f\r ]@[a-zA-Z]+.[a-zA-Z]+")
+		s_email := regexp.MustCompile("<.*[^\t\n\f\r ]@([a-zA-Z0-9]+|.)+")
 		email_sender := s_email.FindString(sender_data)
 		emails_sender := s.Trim(email_sender, "<")
 
 		if emails_sender != "" {
+			// fmt.Println(emails_sender)
 			sender_email_array[index] = emails_sender
 			email_account := s.Split(emails_sender, "@")
+			// fmt.Println(email_account)
 			username_array[index] = email_account[0]
 			domainname_array[index] = email_account[1]
+			// fmt.Println(email_account[1])
+			if s.Contains(email_account[1], ".") {
+				domaingroup := s.Split(email_account[1], ".")
+				// fmt.Println(domaingroup)
+				domaingroup_array[index] = domaingroup[1]
+			}
 		} else {
 			sender_email_array[index] = "None"
 			username_array[index] = "None"
 			domainname_array[index] = "None"
+			domaingroup_array[index] = "None"
 		}
 
 		s_name := regexp.MustCompile("From:[\t\n\f\r ]+.*[\t\n\f\r ]+")
@@ -100,24 +111,24 @@ func main() {
 		// date
 		date := regexp.MustCompile("Date:.*")
 		date_data := date.FindString(email)
-		//fmt.Println(date_data)
-		date_re := regexp.MustCompile("[0-9]+.[a-zA-Z]+.[0-9]+.")
+		fmt.Println(date_data)
+		date_re := regexp.MustCompile(`\d+.\w+.\d+.`)
 		date_my := date_re.FindString(date_data)
-		// fmt.Println("", index+1, " : ", date_my)
-		date_d := regexp.MustCompile("[0-9]{2}")
+		fmt.Println(index+1, " : ", date_my)
+		date_d := regexp.MustCompile(`\d{2}`)
 		dateD := date_d.FindString(date_my)
-		// fmt.Println(dateD)
-		date_m := regexp.MustCompile("[a-zA-Z]{3}")
+		fmt.Println(dateD)
+		date_m := regexp.MustCompile(`\w{3}`)
 		dateM := date_m.FindString(date_my)
-		// fmt.Println(dateM)
-		date_y := regexp.MustCompile("[0-9]{4}")
+		fmt.Println(dateM)
+		date_y := regexp.MustCompile(`\d{4}`)
 		dateY := date_y.FindString(date_my)
-		// fmt.Println(dateY)
-		date_week := regexp.MustCompile("[\t\n\f\r ][a-zA-Z]{3}")
+		fmt.Println(dateY)
+		date_week := regexp.MustCompile(`\s\w{3}`)
 		day := date_week.FindString(date_data)
-		time_date := regexp.MustCompile("[0-9]{2}:[0-9]{2}:[0-9]{2}[\t\n\f\r ].*")
+		time_date := regexp.MustCompile(`\d{2}:\d{2}:\d{2}\s.\d{4}`)
 		time := time_date.FindString(date_data)
-		//fmt.Println(day, "\t", time)
+		fmt.Println(day, "\t", time)
 		if date_data != "" {
 			datesend_array[index] = date_my
 			date_array[index] = dateD
@@ -144,10 +155,10 @@ func main() {
 			subject_array[index] = "None"
 		}
 
-		content := regexp.MustCompile("Status:[\t\n\f\r ]+[a-zA-Z0-9]+(\n|[0-9A-Za-z_]+|.*|[\t\n\f\r ])+")
+		content := regexp.MustCompile("\nStatus:[\t\n\f\r ]+[a-zA-Z0-9]+(\n|[0-9A-Za-z_]+|.*|[\t\n\f\r ])+")
 		content_data := content.FindString(email)
 		content_data = s.Replace(content_data, "\nStatus: ", "", -1)
-		fmt.Println("", index+1, " : ", content_data)
+		// fmt.Println("", index+1, " : ", content_data)
 	}
 
 	fmt.Println("sender_email_array : ", len(sender_email_array))
@@ -161,5 +172,6 @@ func main() {
 	fmt.Println("day_array : ", len(day_array))
 	fmt.Println("time_array : ", len(time_array))
 	fmt.Println("subject_array : ", len(subject_array))
+	fmt.Println("subject_array : ", len(domaingroup_array))
 
 }
