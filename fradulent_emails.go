@@ -92,6 +92,18 @@ func main() {
 			reply_email_array[index] = "None"
 		}
 
+		// date
+		date := regexp.MustCompile("Date:.*")
+		date_data := date.FindString(email)
+		fmt.Println(date_data)
+		date_re := regexp.MustCompile("[0-9]+.[a-zA-Z]+.[0-9]+.")
+		date_my := date_re.FindString(date_data)
+		fmt.Println("", index+1, " : ", date_my)
+		date_week := regexp.MustCompile("[\t\n\f\r ][a-zA-Z]{3}")
+		day := date_week.FindString(date_data)
+		time_date := regexp.MustCompile("[0-9]{2}:[0-9]{2}:[0-9]{2}[\t\n\f\r ].*")
+		time := time_date.FindString(date_data)
+		fmt.Println(day, "\t", time)
 	}
 
 	//fmt.Println(sender_email_array)
