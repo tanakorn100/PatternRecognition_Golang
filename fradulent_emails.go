@@ -20,6 +20,9 @@ var domainname_array [3976]string
 var recipient_email_array [3976]string
 var reply_email_array [3976]string
 var datesend_array [3976]string
+var date_array [3976]string
+var month_array [3976]string
+var year_array [3976]string
 var day_array [3976]string
 var time_array [3976]string
 
@@ -100,7 +103,16 @@ func main() {
 		//fmt.Println(date_data)
 		date_re := regexp.MustCompile("[0-9]+.[a-zA-Z]+.[0-9]+.")
 		date_my := date_re.FindString(date_data)
-		//fmt.Println("", index+1, " : ", date_my)
+		// fmt.Println("", index+1, " : ", date_my)
+		date_d := regexp.MustCompile("[0-9]{2}")
+		dateD := date_d.FindString(date_my)
+		// fmt.Println(dateD)
+		date_m := regexp.MustCompile("[a-zA-Z]{3}")
+		dateM := date_m.FindString(date_my)
+		// fmt.Println(dateM)
+		date_y := regexp.MustCompile("[0-9]{4}")
+		dateY := date_y.FindString(date_my)
+		// fmt.Println(dateY)
 		date_week := regexp.MustCompile("[\t\n\f\r ][a-zA-Z]{3}")
 		day := date_week.FindString(date_data)
 		time_date := regexp.MustCompile("[0-9]{2}:[0-9]{2}:[0-9]{2}[\t\n\f\r ].*")
@@ -108,10 +120,16 @@ func main() {
 		//fmt.Println(day, "\t", time)
 		if date_data != "" {
 			datesend_array[index] = date_my
+			date_array[index] = date_my
+			month_array[index] = date_my
+			year_array[index] = date_my
 			day_array[index] = day
 			time_array[index] = time
 		} else {
 			datesend_array[index] = "None"
+			date_array[index] = "None"
+			month_array[index] = "None"
+			year_array[index] = "None"
 			day_array[index] = "None"
 			time_array[index] = "None"
 		}
@@ -124,5 +142,8 @@ func main() {
 	//fmt.Println(recipient_email_array)
 	fmt.Println(len(recipient_email_array))
 	fmt.Println(len(reply_email_array))
+	fmt.Println(len(datesend_array))
+	fmt.Println(len(day_array))
+	fmt.Println(len(time_array))
 
 }
