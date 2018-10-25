@@ -146,7 +146,7 @@ func main() {
 
 		content := regexp.MustCompile("Status:[\t\n\f\r ]+[a-zA-Z0-9]+(\n|[0-9A-Za-z_]+|.*|[\t\n\f\r ])+")
 		content_data := content.FindString(email)
-		content_data = s.Replace(content_data, "\nStatus:[\t\n\f\r ]+\n", "", -1)
+		content_data = s.Replace(content_data, "\nStatus: ", "", -1)
 		fmt.Println("", index+1, " : ", content_data)
 	}
 
