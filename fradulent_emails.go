@@ -25,8 +25,8 @@ var month_array [3976]string
 var year_array [3976]string
 var day_array [3976]string
 var time_array [3976]string
+var subject_array [3976]string
 
-// var subject_array [3976]string
 // var contentemail_array [3976]string
 
 func main() {
@@ -120,9 +120,9 @@ func main() {
 		//fmt.Println(day, "\t", time)
 		if date_data != "" {
 			datesend_array[index] = date_my
-			date_array[index] = date_my
-			month_array[index] = date_my
-			year_array[index] = date_my
+			date_array[index] = dateD
+			month_array[index] = dateM
+			year_array[index] = dateY
 			day_array[index] = day
 			time_array[index] = time
 		} else {
@@ -133,17 +133,32 @@ func main() {
 			day_array[index] = "None"
 			time_array[index] = "None"
 		}
+
+		subject := regexp.MustCompile("\nSubject:[\t\n\f\r ]*.*")
+		subject_data := subject.FindString(email)
+		subject_data = s.Replace(subject_data, "\nSubject: ", "", -1)
+		// fmt.Println("", index+1, " : ", subject_data)
+		if subject_data != "" {
+			subject_array[index] = subject_data
+		} else {
+			subject_array[index] = "None"
+		}
+
+		content := regexp.MustCompile("Status:[\t\n\f\r ]+[a-zA-Z0-9]+(\n|[0-9A-Za-z_]+|.*|[\t\n\f\r ])+")
+		content_data := content.FindString(email)
+		fmt.Println("", index+1, " : ", content_data)
 	}
 
-	//fmt.Println(sender_email_array)
-	fmt.Println(len(sender_email_array))
-	//fmt.Println(sender_name_array)
-	fmt.Println(len(sender_name_array))
-	//fmt.Println(recipient_email_array)
-	fmt.Println(len(recipient_email_array))
-	fmt.Println(len(reply_email_array))
-	fmt.Println(len(datesend_array))
-	fmt.Println(len(day_array))
-	fmt.Println(len(time_array))
+	fmt.Println("sender_email_array : ", len(sender_email_array))
+	fmt.Println("sender_name_array : ", len(sender_name_array))
+	fmt.Println("recipient_email_array : ", len(recipient_email_array))
+	fmt.Println("reply_email_array : ", len(reply_email_array))
+	fmt.Println("datesend_array : ", len(datesend_array))
+	fmt.Println("date_array : ", len(date_array))
+	fmt.Println("month_array : ", len(month_array))
+	fmt.Println("year_array : ", len(year_array))
+	fmt.Println("day_array : ", len(day_array))
+	fmt.Println("time_array : ", len(time_array))
+	fmt.Println("subject_array : ", len(subject_array))
 
 }
