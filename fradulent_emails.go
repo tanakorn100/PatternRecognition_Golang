@@ -27,8 +27,7 @@ var year_array [3976]string
 var day_array [3976]string
 var time_array [3976]string
 var subject_array [3976]string
-
-// var contentemail_array [3976]string
+var contentemail_array [3976]string
 
 func main() {
 	data, err := ioutil.ReadFile("fradulent_emails_dataset.txt")
@@ -74,12 +73,11 @@ func main() {
 		s_name := regexp.MustCompile(`From:\s+.*\s+`)
 		name_sender := s_name.FindString(sender_data)
 		name_sender = s.Replace(name_sender, "From: ", "", -1)
-		fmt.Println(name_sender)
+		// fmt.Println(name_sender)
 		if s.Contains(name_sender, "\"") {
 			name_sender = s.Replace(name_sender, "\"", "", -1)
-			fmt.Println(name_sender)
+			// fmt.Println(name_sender)
 		}
-
 		// append name_sender to array list
 		if name_sender != "" {
 			sender_name_array[index] = name_sender
@@ -146,7 +144,7 @@ func main() {
 			time_array[index] = "None"
 		}
 
-		subject := regexp.MustCompile("\nSubject:[\t\n\f\r ]*.*")
+		subject := regexp.MustCompile(`\nSubject:\s*.*`)
 		subject_data := subject.FindString(email)
 		subject_data = s.Replace(subject_data, "\nSubject: ", "", -1)
 		// fmt.Println("", index+1, " : ", subject_data)
@@ -156,10 +154,15 @@ func main() {
 			subject_array[index] = "None"
 		}
 
-		content := regexp.MustCompile("\nStatus:[\t\n\f\r ]+[a-zA-Z0-9]+(\n|[0-9A-Za-z_]+|.*|[\t\n\f\r ])+")
+		content := regexp.MustCompile(`\nStatus:\s+[a-zA-Z0-9]+(\n|[0-9A-Za-z_]+|.*|\s)+`)
 		content_data := content.FindString(email)
 		content_data = s.Replace(content_data, "\nStatus: ", "", -1)
 		// fmt.Println("", index+1, " : ", content_data)
+		if content_data != "" {
+			contentemail_array[index] = content_data
+		} else {
+			contentemail_array[index] = "None"
+		}
 	}
 
 	fmt.Println("sender_email_array : ", len(sender_email_array))
@@ -176,5 +179,6 @@ func main() {
 	fmt.Println("day_array : ", len(day_array))
 	fmt.Println("time_array : ", len(time_array))
 	fmt.Println("subject_array : ", len(subject_array))
+	fmt.Println("content_data : ", len(contentemail_array))
 
 }
