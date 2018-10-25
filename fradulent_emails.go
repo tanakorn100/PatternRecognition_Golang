@@ -13,6 +13,14 @@ func checkerror(e error) {
 	}
 }
 
+func counter(data_array [3976]string) map[string]int {
+	counter := make(map[string]int)
+	for _, row := range data_array {
+		counter[row]++
+	}
+	return counter
+}
+
 var sender_email_array [3976]string
 var sender_name_array [3976]string
 var username_array [3976]string
@@ -126,7 +134,7 @@ func main() {
 		date_week := regexp.MustCompile(`\w{3}\,`)
 		day := date_week.FindString(date_data)
 		day = s.Replace(day, ",", "", -1)
-		fmt.Println(day)
+		// fmt.Println(day)
 		time_date := regexp.MustCompile(`\d{2}:\d{2}:\d{2}\s.\d{4}`)
 		time := time_date.FindString(date_data)
 		// fmt.Println(day, "\t", time)
@@ -179,14 +187,17 @@ func main() {
 	fmt.Println("month_array : ", len(month_array))
 	fmt.Println("year_array : ", len(year_array))
 	fmt.Println("day_array : ", len(day_array))
-	fmt.Println("day_array : ", day_array)
-	counter := make(map[string]int)
-	for _, row := range day_array {
-		counter[row]++
-	}
-	fmt.Println(counter)
 	fmt.Println("time_array : ", len(time_array))
 	fmt.Println("subject_array : ", len(subject_array))
 	fmt.Println("content_data : ", len(contentemail_array))
+
+	day_count := counter(day_array)
+	date_count := counter(date_array)
+	month_count := counter(month_array)
+	year_count := counter(year_array)
+	fmt.Println("day_count : ", day_count)
+	fmt.Println("date_count : ", date_count)
+	fmt.Println("month_count : ", month_count)
+	fmt.Println("year_count : ", year_count)
 
 }
