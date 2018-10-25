@@ -59,7 +59,6 @@ func main() {
 		name_sender = s.Replace(name_sender, "From: ", "", -1)
 
 		// remore \" text \"
-
 		// if name_sender[0] == '"' {
 		// 	name_sender = s.Trim(name_sender, "\"*\"")
 		// }
@@ -71,6 +70,7 @@ func main() {
 			sender_name_array[index] = "None"
 		}
 
+		// recipient_data email
 		recipient := regexp.MustCompile("\nTo:.*")
 		recipient_data := recipient.FindString(email)
 		recipient_data = s.Replace(recipient_data, "\nTo: ", "", -1)
@@ -81,10 +81,11 @@ func main() {
 			recipient_email_array[index] = "None"
 		}
 
+		// reply email
 		reply := regexp.MustCompile("\nReply-To:.*")
 		reply_data := reply.FindString(email)
 		reply_data = s.Replace(reply_data, "\nReply-To: ", "", -1)
-		fmt.Println("", index+1, " : ", reply_data)
+		// fmt.Println("", index+1, " : ", reply_data)
 		if reply_data != "" {
 			reply_email_array[index] = reply_data
 		} else {
@@ -99,5 +100,6 @@ func main() {
 	fmt.Println(len(sender_name_array))
 	//fmt.Println(recipient_email_array)
 	fmt.Println(len(recipient_email_array))
+	fmt.Println(len(reply_email_array))
 
 }
