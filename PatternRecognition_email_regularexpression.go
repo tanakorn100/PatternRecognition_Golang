@@ -56,7 +56,7 @@ func main() {
 		username_array := append(username_array, email_account[0])
 		domainname_array := append(domainname_array, email_account[1])
 
-		recipient := regexp.MustCompile("To:.*")
+		recipient := regexp.MustCompile("\nTo:.*")
 		recipient_data := recipient.FindString(email)
 		email_rep := regexp.MustCompile(" .*@.*$")
 		recipient_email := email_rep.FindString(recipient_data)
