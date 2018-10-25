@@ -110,7 +110,7 @@ func main() {
 		// date
 		date := regexp.MustCompile("Date:.*")
 		date_data := date.FindString(email)
-		//fmt.Println(date_data)
+		// fmt.Println(date_data)
 		date_re := regexp.MustCompile(`\d+.\w+.\d+.`)
 		date_my := date_re.FindString(date_data)
 		// fmt.Println(index+1, " : ", date_my)
@@ -123,8 +123,10 @@ func main() {
 		date_y := regexp.MustCompile(`\d{4}`)
 		dateY := date_y.FindString(date_my)
 		// fmt.Println(dateY)
-		date_week := regexp.MustCompile(`\s\w{3}`)
+		date_week := regexp.MustCompile(`\w{3}\,`)
 		day := date_week.FindString(date_data)
+		day = s.Replace(day, ",", "", -1)
+		fmt.Println(day)
 		time_date := regexp.MustCompile(`\d{2}:\d{2}:\d{2}\s.\d{4}`)
 		time := time_date.FindString(date_data)
 		// fmt.Println(day, "\t", time)
@@ -177,6 +179,12 @@ func main() {
 	fmt.Println("month_array : ", len(month_array))
 	fmt.Println("year_array : ", len(year_array))
 	fmt.Println("day_array : ", len(day_array))
+	fmt.Println("day_array : ", day_array)
+	counter := make(map[string]int)
+	for _, row := range day_array {
+		counter[row]++
+	}
+	fmt.Println(counter)
 	fmt.Println("time_array : ", len(time_array))
 	fmt.Println("subject_array : ", len(subject_array))
 	fmt.Println("content_data : ", len(contentemail_array))
