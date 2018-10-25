@@ -18,6 +18,11 @@ var sender_name_array [3976]string
 var username_array [3976]string
 var domainname_array [3976]string
 var recipient_email_array [3976]string
+var reply_email_array [3976]string
+
+// var datesend_array [3976]string
+// var subject_array [3976]string
+// var contentemail_array [3976]string
 
 func main() {
 	data, err := ioutil.ReadFile("fradulent_emails_dataset.txt")
@@ -69,18 +74,30 @@ func main() {
 		recipient := regexp.MustCompile("\nTo:.*")
 		recipient_data := recipient.FindString(email)
 		recipient_data = s.Replace(recipient_data, "\nTo: ", "", -1)
-		fmt.Println(recipient_data)
+		//fmt.Println("", index+1, " : ", recipient_data)
 		if recipient_data != "" {
 			recipient_email_array[index] = recipient_data
 		} else {
 			recipient_email_array[index] = "None"
 		}
+
+		reply := regexp.MustCompile("\nReply-To:.*")
+		reply_data := reply.FindString(email)
+		reply_data = s.Replace(reply_data, "\nReply-To: ", "", -1)
+		fmt.Println("", index+1, " : ", reply_data)
+		if reply_data != "" {
+			reply_email_array[index] = reply_data
+		} else {
+			reply_email_array[index] = "None"
+		}
+
 	}
 
 	//fmt.Println(sender_email_array)
 	fmt.Println(len(sender_email_array))
 	//fmt.Println(sender_name_array)
 	fmt.Println(len(sender_name_array))
-	fmt.Println(recipient_data)
+	//fmt.Println(recipient_email_array)
+	fmt.Println(len(recipient_email_array))
 
 }
