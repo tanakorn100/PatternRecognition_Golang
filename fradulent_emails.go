@@ -1,10 +1,16 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"math/rand"
+	"os"
 	"regexp"
+	"sort"
 	s "strings"
+	"time"
 )
 
 func checkerror(e error) {
@@ -19,6 +25,12 @@ func counter(data_array [3976]string) map[string]int {
 		counter[row]++
 	}
 	return counter
+}
+
+func checkError(message string, err error) {
+	if err != nil {
+		log.Fatal(message, err)
+	}
 }
 
 var sender_email_array [3976]string
@@ -191,13 +203,58 @@ func main() {
 	fmt.Println("subject_array : ", len(subject_array))
 	fmt.Println("content_data : ", len(contentemail_array))
 
-	day_count := counter(day_array)
-	date_count := counter(date_array)
-	month_count := counter(month_array)
-	year_count := counter(year_array)
-	fmt.Println("day_count : ", day_count)
-	fmt.Println("date_count : ", date_count)
-	fmt.Println("month_count : ", month_count)
-	fmt.Println("year_count : ", year_count)
+	sender_email_count := counter(sender_email_array)
+	// sender_name_count := counter(sender_name_array)
+	// username_count := counter(username_array)
+	// domainname_count := counter(domainname_array)
+	// domaingroup_count := counter(domaingroup_array)
+	// day_count := counter(day_array)
+	// date_count := counter(date_array)
+	// month_count := counter(month_array)
+	// year_count := counter(year_array)
+
+	// fmt.Println("sender_email_count : ", sender_email_count)
+	// fmt.Println("sender_name_count : ", sender_name_count)
+	// fmt.Println("username_count : ", username_count)
+	// fmt.Println("domainname_count : ", domainname_count)
+	// fmt.Println("domaingroup_count : ", domaingroup_count)
+	// fmt.Println("day_count : ", day_count)
+	// fmt.Println("date_count : ", date_count)
+	// fmt.Println("month_count : ", month_count)
+	// fmt.Println("year_count : ", year_count)
+
+	fmt.Println("sender_email_count : ", sender_email_count)
+	n := map[int][]string{}
+	var a []int
+	for k, v := range sender_email_count {
+		n[v] = append(n[v], k)
+	}
+	for k := range n {
+		a = append(a, k)
+	}
+	sort.Sort(sort.Reverse(sort.IntSlice(a)))
+	for _, k := range a {
+		for _, s := range n[k] {
+			fmt.Printf("%s, %d\n", s, k)
+		}
+	}
+	fmt.Println(a)
+
+	f, err := os.Create("/sender_email_count")
+	checkerror(err)
+	defer f.Close()
+
+	w := bufio.NewWriter(f)
+	//choose random number for recipe
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	i := r.Perm(5)
+
+	_, err = fmt.Fprintf(w, "%v\n", i)
+	check(err)
+	_, err = fmt.Fprintf(w, "%d\n", i[0])
+	check(err)
+	_, err = fmt.Fprintf(w, "%d\n", i[1])
+	check(err)
+	w.Flush()
 
 }
