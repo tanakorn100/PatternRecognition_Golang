@@ -1,16 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math/rand"
-	"os"
 	"regexp"
 	"sort"
 	s "strings"
-	"time"
 )
 
 func checkerror(e error) {
@@ -56,7 +52,7 @@ func main() {
 	emails := s.Split(emails_data_str, "From r ")
 	emails = emails[1:]
 
-	fmt.Println("Total : ", len(emails))
+	// fmt.Println("Total : ", len(emails))
 
 	for index, email := range emails {
 
@@ -187,21 +183,21 @@ func main() {
 		}
 	}
 
-	fmt.Println("sender_email_array : ", len(sender_email_array))
-	fmt.Println("sender_name_array : ", len(sender_name_array))
-	fmt.Println("username_array : ", len(username_array))
-	fmt.Println("domainname_array : ", len(domainname_array))
-	fmt.Println("domaingroup_array : ", len(domaingroup_array))
-	fmt.Println("recipient_email_array : ", len(recipient_email_array))
-	fmt.Println("reply_email_array : ", len(reply_email_array))
-	fmt.Println("datesend_array : ", len(datesend_array))
-	fmt.Println("date_array : ", len(date_array))
-	fmt.Println("month_array : ", len(month_array))
-	fmt.Println("year_array : ", len(year_array))
-	fmt.Println("day_array : ", len(day_array))
-	fmt.Println("time_array : ", len(time_array))
-	fmt.Println("subject_array : ", len(subject_array))
-	fmt.Println("content_data : ", len(contentemail_array))
+	// fmt.Println("sender_email_array : ", len(sender_email_array))
+	// fmt.Println("sender_name_array : ", len(sender_name_array))
+	// fmt.Println("username_array : ", len(username_array))
+	// fmt.Println("domainname_array : ", len(domainname_array))
+	// fmt.Println("domaingroup_array : ", len(domaingroup_array))
+	// fmt.Println("recipient_email_array : ", len(recipient_email_array))
+	// fmt.Println("reply_email_array : ", len(reply_email_array))
+	// fmt.Println("datesend_array : ", len(datesend_array))
+	// fmt.Println("date_array : ", len(date_array))
+	// fmt.Println("month_array : ", len(month_array))
+	// fmt.Println("year_array : ", len(year_array))
+	// fmt.Println("day_array : ", len(day_array))
+	// fmt.Println("time_array : ", len(time_array))
+	// fmt.Println("subject_array : ", len(subject_array))
+	// fmt.Println("content_data : ", len(contentemail_array))
 
 	sender_email_count := counter(sender_email_array)
 	// sender_name_count := counter(sender_name_array)
@@ -223,10 +219,10 @@ func main() {
 	// fmt.Println("month_count : ", month_count)
 	// fmt.Println("year_count : ", year_count)
 
-	fmt.Println("sender_email_count : ", sender_email_count)
+	// fmt.Println("sender_email_count : ", sender_email_count)
 	n := map[int][]string{}
 	var a []int
-	for k, v := range sender_email_count {
+	for k, v := range sender_email_array {
 		n[v] = append(n[v], k)
 	}
 	for k := range n {
@@ -238,23 +234,5 @@ func main() {
 			fmt.Printf("%s, %d\n", s, k)
 		}
 	}
-	fmt.Println(a)
-
-	f, err := os.Create("/sender_email_count")
-	checkerror(err)
-	defer f.Close()
-
-	w := bufio.NewWriter(f)
-	//choose random number for recipe
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	i := r.Perm(5)
-
-	_, err = fmt.Fprintf(w, "%v\n", i)
-	check(err)
-	_, err = fmt.Fprintf(w, "%d\n", i[0])
-	check(err)
-	_, err = fmt.Fprintf(w, "%d\n", i[1])
-	check(err)
-	w.Flush()
 
 }
