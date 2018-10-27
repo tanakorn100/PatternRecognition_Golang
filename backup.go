@@ -60,4 +60,21 @@ func main() {
 	// 2.
 	// 3. Nattawut
 	// 4. Ruangvivattanaroj
+
+	// fmt.Println("sender_email_array : ", len(sender_email_array))
+	// fmt.Println("sender_name_array : ", len(sender_name_array))
+	// fmt.Println("username_array : ", len(username_array))
+	// fmt.Println("domainname_array : ", len(domainname_array))
+	// fmt.Println("domaingroup_array : ", len(domaingroup_array))
+	// fmt.Println("recipient_email_array : ", len(recipient_email_array))
+	// fmt.Println("reply_email_array : ", len(reply_email_array))
+	// fmt.Println("datesend_array : ", len(datesend_array))
+	// fmt.Println("date_array : ", len(date_array))
+	// fmt.Println("month_array : ", len(month_array))
+	// fmt.Println("year_array : ", len(year_array))
+	// fmt.Println("day_array : ", len(day_array))
+	// fmt.Println("time_array : ", len(time_array))
+	// fmt.Println("subject_array : ", len(subject_array))
+	// fmt.Println("content_data : ", len(contentemail_array))
+
 }

@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"regexp"
-	"sort"
 	s "strings"
 )
 
@@ -15,7 +13,7 @@ func checkerror(e error) {
 	}
 }
 
-func counter(data_array [3976]string) map[string]int {
+func counter(data_array []string) map[string]int {
 	counter := make(map[string]int)
 	for _, row := range data_array {
 		counter[row]++
@@ -43,6 +41,7 @@ var year_array [3976]string
 var day_array [3976]string
 var time_array [3976]string
 var subject_array [3976]string
+var subject_word_array []string
 var contentemail_array [3976]string
 
 func main() {
@@ -172,6 +171,12 @@ func main() {
 			subject_array[index] = "None"
 		}
 
+		subject_word := s.Split(subject_data, " ")
+		// fmt.Println(len(subject_word), " ", subject_word)
+		for _, word := range subject_word {
+			subject_word_array = append(subject_word_array, word)
+		}
+
 		content := regexp.MustCompile(`\nStatus:\s+[a-zA-Z0-9]+(\n|[0-9A-Za-z_]+|.*|\s)+`)
 		content_data := content.FindString(email)
 		content_data = s.Replace(content_data, "\nStatus: ", "", -1)
@@ -183,22 +188,6 @@ func main() {
 		}
 	}
 
-	// fmt.Println("sender_email_array : ", len(sender_email_array))
-	// fmt.Println("sender_name_array : ", len(sender_name_array))
-	// fmt.Println("username_array : ", len(username_array))
-	// fmt.Println("domainname_array : ", len(domainname_array))
-	// fmt.Println("domaingroup_array : ", len(domaingroup_array))
-	// fmt.Println("recipient_email_array : ", len(recipient_email_array))
-	// fmt.Println("reply_email_array : ", len(reply_email_array))
-	// fmt.Println("datesend_array : ", len(datesend_array))
-	// fmt.Println("date_array : ", len(date_array))
-	// fmt.Println("month_array : ", len(month_array))
-	// fmt.Println("year_array : ", len(year_array))
-	// fmt.Println("day_array : ", len(day_array))
-	// fmt.Println("time_array : ", len(time_array))
-	// fmt.Println("subject_array : ", len(subject_array))
-	// fmt.Println("content_data : ", len(contentemail_array))
-
 	// sender_email_count := counter(sender_email_array)
 	// sender_name_count := counter(sender_name_array)
 	// username_count := counter(username_array)
@@ -207,7 +196,7 @@ func main() {
 	// day_count := counter(day_array)
 	// date_count := counter(date_array)
 	// month_count := counter(month_array)
-	year_count := counter(year_array)
+	// year_count := counter(year_array)
 
 	// fmt.Println("sender_email_count : ", sender_email_count)
 	// fmt.Println("sender_name_count : ", sender_name_count)
@@ -220,21 +209,25 @@ func main() {
 	// fmt.Println("year_count : ", year_count)
 
 	// fmt.Println("sender_email_count : ", sender_email_count)
+	// fmt.Println(subject_word_array)
+	// fmt.Println(len(subject_word_array))
+	// subject_word_count := counter(subject_word_array)
+	// fmt.Println(subject_word_count)
 
 	// sort value in map
-	n := map[int][]string{}
-	var a []int
-	for k, v := range year_count {
-		n[v] = append(n[v], k)
-	}
-	for k := range n {
-		a = append(a, k)
-	}
-	sort.Sort(sort.Reverse(sort.IntSlice(a)))
-	for _, k := range a {
-		for _, s := range n[k] {
-			fmt.Printf("%s, %d\n", s, k)
-		}
-	}
+	// n := map[int][]string{}
+	// var a []int
+	// for k, v := range subject_word_count {
+	// 	n[v] = append(n[v], k)
+	// }
+	// for k := range n {
+	// 	a = append(a, k)
+	// }
+	// sort.Sort(sort.Reverse(sort.IntSlice(a)))
+	// for _, k := range a {
+	// 	for _, s := range n[k] {
+	// 		fmt.Printf("%s, %d\n", s, k)
+	// 	}
+	// }
 
 }
