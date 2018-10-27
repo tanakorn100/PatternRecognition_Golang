@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"regexp"
@@ -13,7 +14,7 @@ func checkerror(e error) {
 	}
 }
 
-func counter(data_array []string) map[string]int {
+func counter(data_array [3976]string) map[string]int {
 	counter := make(map[string]int)
 	for _, row := range data_array {
 		counter[row]++
@@ -34,12 +35,15 @@ var domainname_array [3976]string
 var domaingroup_array [3976]string
 var recipient_email_array [3976]string
 var reply_email_array [3976]string
+var match_email_array [3976]string
 var datesend_array [3976]string
+var date_month_array [3976]string
 var date_array [3976]string
 var month_array [3976]string
 var year_array [3976]string
 var day_array [3976]string
 var time_array [3976]string
+var day_time_array [3976]string
 var subject_array [3976]string
 var subject_word_array []string
 var contentemail_array [3976]string
@@ -51,19 +55,14 @@ func main() {
 	emails := s.Split(emails_data_str, "From r ")
 	emails = emails[1:]
 
-	// fmt.Println("Total : ", len(emails))
+	fmt.Println("Total : ", len(emails))
 
 	for index, email := range emails {
 
-		// fmt.Println("----- Email No. ", index+1, " ------")
 		sender := regexp.MustCompile("\nFrom:.*")
 		sender_data := sender.FindString(email)
-		// fmt.Println(sender_data)
-
 		s_email := regexp.MustCompile(`\w+\S@(\w+|\d+|\.)+`)
 		emails_sender := s_email.FindString(sender_data)
-		// fmt.Println(emails_sender)
-		// emails_sender := s.Trim(email_sender, "<")
 
 		if emails_sender != "" {
 			// fmt.Println(emails_sender)
@@ -122,6 +121,13 @@ func main() {
 			reply_email_array[index] = "None"
 		}
 
+		// match email sender and reply-to
+		if emails_sender == reply_data {
+			match_email_array[index] = "Match"
+		} else {
+			match_email_array[index] = "non-Match"
+		}
+
 		// date
 		date := regexp.MustCompile("Date:.*")
 		date_data := date.FindString(email)
@@ -129,6 +135,9 @@ func main() {
 		date_re := regexp.MustCompile(`\d+.\w+.\d+.`)
 		date_my := date_re.FindString(date_data)
 		// fmt.Println(index+1, " : ", date_my)
+		date_month_find := regexp.MustCompile(`\d+.\w+`)
+		date_month := date_month_find.FindString(date_my)
+		// fmt.Println(date_month)
 		date_d := regexp.MustCompile(`\d{2}`)
 		dateD := date_d.FindString(date_my)
 		// fmt.Println(dateD)
@@ -145,20 +154,31 @@ func main() {
 		time_date := regexp.MustCompile(`\d{2}:\d{2}:\d{2}\s.\d{4}`)
 		time := time_date.FindString(date_data)
 		// fmt.Println(day, "\t", time)
+		day_time_find := regexp.MustCompile(`\s\d{2}:`)
+		day_time := day_time_find.FindString(date_data)
+		day_time = s.Replace(day_time, " ", "", -1)
+		day_time = s.Replace(day_time, ":", "", -1)
+		day_time_new := day + " " + day_time
+		// fmt.Println(day_time_new)
+
 		if date_data != "" {
 			datesend_array[index] = date_my
+			date_month_array[index] = date_month
 			date_array[index] = dateD
 			month_array[index] = dateM
 			year_array[index] = dateY
 			day_array[index] = day
 			time_array[index] = time
+			day_time_array[index] = day_time_new
 		} else {
 			datesend_array[index] = "None"
+			date_month_array[index] = "None"
 			date_array[index] = "None"
 			month_array[index] = "None"
 			year_array[index] = "None"
 			day_array[index] = "None"
 			time_array[index] = "None"
+			day_time_array[index] = "None"
 		}
 
 		subject := regexp.MustCompile(`\nSubject:\s*.*`)
@@ -197,6 +217,10 @@ func main() {
 	// date_count := counter(date_array)
 	// month_count := counter(month_array)
 	// year_count := counter(year_array)
+	// subject_word_count := counter(subject_word_array)
+	// day_time_count := counter(day_time_array)
+	// date_month_count := counter(date_month_array)
+	// match_email_count := counter(match_email_array)
 
 	// fmt.Println("sender_email_count : ", sender_email_count)
 	// fmt.Println("sender_name_count : ", sender_name_count)
@@ -211,13 +235,12 @@ func main() {
 	// fmt.Println("sender_email_count : ", sender_email_count)
 	// fmt.Println(subject_word_array)
 	// fmt.Println(len(subject_word_array))
-	// subject_word_count := counter(subject_word_array)
 	// fmt.Println(subject_word_count)
 
 	// sort value in map
 	// n := map[int][]string{}
 	// var a []int
-	// for k, v := range subject_word_count {
+	// for k, v := range match_email_count {
 	// 	n[v] = append(n[v], k)
 	// }
 	// for k := range n {
