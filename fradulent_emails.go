@@ -199,7 +199,7 @@ func main() {
 	// fmt.Println("subject_array : ", len(subject_array))
 	// fmt.Println("content_data : ", len(contentemail_array))
 
-	sender_email_count := counter(sender_email_array)
+	// sender_email_count := counter(sender_email_array)
 	// sender_name_count := counter(sender_name_array)
 	// username_count := counter(username_array)
 	// domainname_count := counter(domainname_array)
@@ -207,7 +207,7 @@ func main() {
 	// day_count := counter(day_array)
 	// date_count := counter(date_array)
 	// month_count := counter(month_array)
-	// year_count := counter(year_array)
+	year_count := counter(year_array)
 
 	// fmt.Println("sender_email_count : ", sender_email_count)
 	// fmt.Println("sender_name_count : ", sender_name_count)
@@ -220,9 +220,11 @@ func main() {
 	// fmt.Println("year_count : ", year_count)
 
 	// fmt.Println("sender_email_count : ", sender_email_count)
+
+	// sort value in map
 	n := map[int][]string{}
 	var a []int
-	for k, v := range sender_email_array {
+	for k, v := range year_count {
 		n[v] = append(n[v], k)
 	}
 	for k := range n {
