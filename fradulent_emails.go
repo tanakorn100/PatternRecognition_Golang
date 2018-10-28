@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"regexp"
 	s "strings"
 )
@@ -28,6 +30,13 @@ func checkError(message string, err error) {
 	}
 }
 
+type Countryz struct {
+	CountryName string
+	Count       int
+}
+
+type Countriess []Countryz
+
 var sender_email_array [3976]string
 var sender_name_array [3976]string
 var username_array [3976]string
@@ -47,6 +56,7 @@ var day_time_array [3976]string
 var subject_array [3976]string
 var subject_word_array []string
 var contentemail_array [3976]string
+var countryArray [3976]string
 
 func main() {
 	data, err := ioutil.ReadFile("fradulent_emails_dataset.txt")
@@ -54,6 +64,11 @@ func main() {
 	emails_data_str := string(data)
 	emails := s.Split(emails_data_str, "From r ")
 	emails = emails[1:]
+
+	d, er := ioutil.ReadFile("country.txt")
+	checkerror(er)
+	country_data_str := string(d)
+	countries := s.Split(country_data_str, "\r\n")
 
 	fmt.Println("Total : ", len(emails))
 
@@ -65,16 +80,13 @@ func main() {
 		emails_sender := s_email.FindString(sender_data)
 
 		if emails_sender != "" {
-			// fmt.Println(emails_sender)
+
 			sender_email_array[index] = emails_sender
 			email_account := s.Split(emails_sender, "@")
-			// fmt.Println(email_account)
 			username_array[index] = email_account[0]
 			domainname_array[index] = email_account[1]
-			// fmt.Println(email_account[1])
 			if s.Contains(email_account[1], ".") {
 				domaingroup := s.Split(email_account[1], ".")
-				// fmt.Println(domaingroup)
 				domaingroup_array[index] = domaingroup[1]
 			}
 		} else {
@@ -87,10 +99,8 @@ func main() {
 		s_name := regexp.MustCompile(`From:\s+.*\s+`)
 		name_sender := s_name.FindString(sender_data)
 		name_sender = s.Replace(name_sender, "From: ", "", -1)
-		// fmt.Println(name_sender)
 		if s.Contains(name_sender, "\"") {
 			name_sender = s.Replace(name_sender, "\"", "", -1)
-			// fmt.Println(name_sender)
 		}
 		// append name_sender to array list
 		if name_sender != "" {
@@ -103,7 +113,7 @@ func main() {
 		recipient := regexp.MustCompile("\nTo:.*")
 		recipient_data := recipient.FindString(email)
 		recipient_data = s.Replace(recipient_data, "\nTo: ", "", -1)
-		//fmt.Println("", index+1, " : ", recipient_data)
+		// fmt.Println("", index+1, " : ", recipient_data)
 		if recipient_data != "" {
 			recipient_email_array[index] = recipient_data
 		} else {
@@ -114,9 +124,17 @@ func main() {
 		reply := regexp.MustCompile("\nReply-To:.*")
 		reply_data := reply.FindString(email)
 		reply_data = s.Replace(reply_data, "\nReply-To: ", "", -1)
-		// fmt.Println("", index+1, " : ", reply_data)
+		re_email := regexp.MustCompile(`\w+\S@(\w+|\d+|\.)+`)
+		reply_emails_sender := re_email.FindString(reply_data)
+
+		// if s.Contains(reply_data, "<") {
+		// 	reply_data = s.Replace(reply_data, "<", "", -1)
+		// 	reply_data = s.Replace(reply_data, ">", "", -1)
+		// }
+		// fmt.Println("", index+1, " : ", reply_emails_sender)
+
 		if reply_data != "" {
-			reply_email_array[index] = reply_data
+			reply_email_array[index] = reply_emails_sender
 		} else {
 			reply_email_array[index] = "None"
 		}
@@ -134,26 +152,19 @@ func main() {
 		// fmt.Println(date_data)
 		date_re := regexp.MustCompile(`\d+.\w+.\d+.`)
 		date_my := date_re.FindString(date_data)
-		// fmt.Println(index+1, " : ", date_my)
 		date_month_find := regexp.MustCompile(`\d+.\w+`)
 		date_month := date_month_find.FindString(date_my)
-		// fmt.Println(date_month)
 		date_d := regexp.MustCompile(`\d{2}`)
 		dateD := date_d.FindString(date_my)
-		// fmt.Println(dateD)
 		date_m := regexp.MustCompile(`\w{3}`)
 		dateM := date_m.FindString(date_my)
-		// fmt.Println(dateM)
 		date_y := regexp.MustCompile(`\d{4}`)
 		dateY := date_y.FindString(date_my)
-		// fmt.Println(dateY)
 		date_week := regexp.MustCompile(`\w{3}\,`)
 		day := date_week.FindString(date_data)
 		day = s.Replace(day, ",", "", -1)
-		// fmt.Println(day)
 		time_date := regexp.MustCompile(`\d{2}:\d{2}:\d{2}\s.\d{4}`)
 		time := time_date.FindString(date_data)
-		// fmt.Println(day, "\t", time)
 		day_time_find := regexp.MustCompile(`\s\d{2}:`)
 		day_time := day_time_find.FindString(date_data)
 		day_time = s.Replace(day_time, " ", "", -1)
@@ -184,18 +195,17 @@ func main() {
 		subject := regexp.MustCompile(`\nSubject:\s*.*`)
 		subject_data := subject.FindString(email)
 		subject_data = s.Replace(subject_data, "\nSubject: ", "", -1)
-		// fmt.Println("", index+1, " : ", subject_data)
+		// fmt.Println(subject_data)
 		if subject_data != "" {
 			subject_array[index] = subject_data
 		} else {
 			subject_array[index] = "None"
 		}
-
 		subject_word := s.Split(subject_data, " ")
-		// fmt.Println(len(subject_word), " ", subject_word)
 		for _, word := range subject_word {
 			subject_word_array = append(subject_word_array, word)
 		}
+		// fmt.Println(subject_word)
 
 		content := regexp.MustCompile(`\nStatus:\s+[a-zA-Z0-9]+(\n|[0-9A-Za-z_]+|.*|\s)+`)
 		content_data := content.FindString(email)
@@ -206,6 +216,30 @@ func main() {
 		} else {
 			contentemail_array[index] = "None"
 		}
+		for indx, country := range countries {
+			// fmt.Println("----- Mail. ", index+1, " ------")
+			countryArray[indx] = country
+			if s.Contains(contentemail_array[index], countryArray[indx]) {
+				var countrys = Countriess{
+					Countryz{
+						countryArray[indx],
+						s.Count(contentemail_array[index], countryArray[indx]),
+					},
+				}
+				// Found!
+				pagesJson, err := json.Marshal(countrys)
+				if err != nil {
+					log.Fatal("Cannot encode to JSON ", err)
+				}
+				fmt.Print("----- Mail. ", index+1, " ------", " index: ")
+				fmt.Fprintf(os.Stdout, "%s", pagesJson)
+				//fmt.Print(" Time(s)")
+				fmt.Println("")
+				// fmt.Println("----- Mail. ", index+1, " ------", " Country Found: ", countryArray[indx], " Count: ", s.Count(contentemail_array[index], countryArray[indx]))
+
+			}
+		}
+
 	}
 
 	// sender_email_count := counter(sender_email_array)
@@ -221,6 +255,7 @@ func main() {
 	// day_time_count := counter(day_time_array)
 	// date_month_count := counter(date_month_array)
 	// match_email_count := counter(match_email_array)
+	// datesend_count := counter(datesend_array)
 
 	// fmt.Println("sender_email_count : ", sender_email_count)
 	// fmt.Println("sender_name_count : ", sender_name_count)
@@ -240,7 +275,7 @@ func main() {
 	// sort value in map
 	// n := map[int][]string{}
 	// var a []int
-	// for k, v := range match_email_count {
+	// for k, v := range year_count {
 	// 	n[v] = append(n[v], k)
 	// }
 	// for k := range n {
